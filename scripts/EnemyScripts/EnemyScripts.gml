@@ -20,7 +20,10 @@ function EnemyStateFree()
 		ySpd = 0;
 	}
 	
+	EnemyTakeDamage();
 	//COLLISION
+	
+	EnemyCollision();
 	
 	x += xSpd;
 	y += ySpd;
@@ -30,5 +33,38 @@ function EnemyStateFree()
 		global.enemiesKilledThisRound++;
 		instance_destroy();
 		
+	}
+}
+
+
+
+
+///
+///Collision
+///
+function EnemyCollision()
+{
+	if(place_meeting(x + xSpd, y, oEnemy))
+	{
+		xSpd = 0;
+	}
+	
+	if(place_meeting(x, y + ySpd, oEnemy))
+	{
+		ySpd = 0;
+	}
+}
+
+
+
+
+///
+/// Take Damage
+///
+function EnemyTakeDamage()
+{
+	if(place_meeting(x, y, oAttack))//BASIC, GÖR MER KOMPLICERAD
+	{
+		hp -= 10;
 	}
 }

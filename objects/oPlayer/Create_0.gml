@@ -12,4 +12,6 @@ dir = 0;
 
 attackList = ds_list_create();
 ds_list_add( attackList, Attack0);
+ds_list_add( attackList, Attack1);
 attack0Cooldown = 0;
+attack1Cooldown = 0;

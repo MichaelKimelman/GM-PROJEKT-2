@@ -13,6 +13,7 @@ function GameScripts(){
 function NewRound()
 {
 	global.enemiesKilledThisRound = 0;
+	global.enemiesSpawnedThisRound = 0;
 	if(currentRound <= 6 )
 	{
 		currentRound++;
@@ -52,7 +53,8 @@ function NewRound()
 		
 		case 6:
 		
-		
+		global.enemiesMaxThisRound = 0;
+		global.victoryCondition = true;
 		
 		break;
 		
