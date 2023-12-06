@@ -12,3 +12,5 @@ ySpd = 0;
 moveSpd = .4;
 
 dir = 0;
+
+level = 0;

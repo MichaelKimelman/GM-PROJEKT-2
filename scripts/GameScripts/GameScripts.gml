@@ -30,6 +30,15 @@ function NewRound()
 		case 2:
 			
 			global.enemiesMaxThisRound = 30;
+			struct1 = 
+			{	
+				scr: Attack0ChooseDir,
+				//Args: dir1, dir2, index in cdlist
+				args: [ 270, 90, 1],
+			}
+			ds_list_add(global.attackList, struct1);
+			//ds_list_add( global.attackList, Attack1);
+			//ds_list_add( global.attackList, global.Attack0ChooseDir(270,90,attack1Cooldown));
 		
 		break;
 		

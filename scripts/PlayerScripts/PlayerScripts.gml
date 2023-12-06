@@ -43,9 +43,13 @@ function PlayerStateFree()
 ///
 function PlayerAttacksExecute()
 {
-	for( var i = 0; i < ds_list_size(attackList); i++)
+	for( var i = 0; i < ds_list_size(global.attackList); i++)
 	{
-		script_execute(ds_list_find_value(attackList, i));
+		var _list = ds_list_find_value(global.attackList, i);
+		//var _listArraySize = 0;
+		
+		
+		script_execute_ext(_list.scr, _list.args);
 	}
 }
 
@@ -62,11 +66,92 @@ function PlayerTakeDamage()
 	{
 		var newDirection = point_direction( collidedEnemy.x, collidedEnemy.y, x, y);
 		
-		xSpd = lengthdir_x(20, newDirection);
-		ySpd = lengthdir_y(20, newDirection);
+		//Damage List Mechanic
+		var instList = ds_list_create();
 		
-		hp -= 2;
+		instance_place_list(x, y, oEnemy, instList, false);
 		
+		var listSize = ds_list_size(instList);
+		
+		for(var i = 0; i < listSize; i++)
+		{
+			var inst = ds_list_find_value(instList, i);
+			
+			if(ds_list_find_index(damageList, inst) == -1)
+			{
+				ds_list_add(damageList, inst);
+				
+				xSpd = lengthdir_x(20, newDirection);
+				ySpd = lengthdir_y(20, newDirection);
+				
+				hp -= 2;
+			}
+		}
+		
+		ds_list_destroy(instList);
+		
+	}
+	
+	//Free Up damageList Space
+	var damageListSize = ds_list_size(damageList);
+	
+	for(var i = 0; i < damageListSize; i++)
+	{
+		var inst = ds_list_find_value(damageList, i);
+		
+		if(!instance_exists(inst) || !place_meeting(x, y, inst))
+		{
+			ds_list_delete(damageList, i);
+			i--;
+			damageListSize--;
+		}
+	}
+}
+
+
+
+
+///
+/// Attack 0 and 1 but reusable code
+///
+function Attack0ChooseDir( _dir1, _dir2, _cdIndex)
+{
+	var _cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
+	
+	if(_cdCurrentValue != 0)
+	{
+		_cdCurrentValue--;
+		ds_list_insert(global.attackCooldowns, _cdIndex, _cdCurrentValue);
+	}
+	
+	//CHECK VALUE AGAIN
+	_cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
+	
+	if(_cdCurrentValue == 0)
+	{
+		var directionOfAttack = 1;
+		
+		repeat(2)
+		{
+			var attackInst = instance_create_layer(x + 10 * directionOfAttack, y, "Instances", oAttack0);
+			
+			with(attackInst)
+			{
+				if(directionOfAttack)
+				{
+					dir = _dir1;
+					image_angle = dir;
+				}
+				else
+				{
+					dir = _dir2;
+					image_angle = dir;
+				}
+				
+			}
+			directionOfAttack *= -1;
+		}
+		ds_list_insert(global.attackCooldowns, _cdIndex, 60);
 	}
 }
 
@@ -76,7 +161,7 @@ function PlayerTakeDamage()
 ///
 /// Attack 0 
 ///
-function Attack0()
+function Attack0( _dir1, _dir2, _attackCD)
 {
 	if(attack0Cooldown != 0)
 	{
