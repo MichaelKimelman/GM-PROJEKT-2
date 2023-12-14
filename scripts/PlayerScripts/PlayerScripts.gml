@@ -45,11 +45,27 @@ function PlayerAttacksExecute()
 {
 	for( var i = 0; i < ds_list_size(global.attackList); i++)
 	{
-		var _list = ds_list_find_value(global.attackList, i);
+		var _listItem = ds_list_find_value(global.attackList, i);
 		//var _listArraySize = 0;
 		
 		
-		script_execute_ext(_list.scr, _list.args);
+		//var _dir1 = _listItem.args[0];
+		//var _dir2 = _listItem.args[1];
+		//var _index = _listItem.args[2];
+		//var _timer = _listItem.args[3];
+		
+		//var _cd1 = ds_list_find_value(global.attackCooldowns, 0);
+		//var _cd2 = ds_list_find_value(global.attackCooldowns, 1);
+		//var _cd3 = ds_list_find_value(global.attackCooldowns, 2);
+		//var _cd4 = ds_list_find_value(global.attackCooldowns, 3);
+		
+		if(!global.victoryCondition)
+		{
+			script_execute_ext(_listItem.scr, _listItem.args);
+			
+			var _debugStep = 0;
+		}
+		
 	}
 }
 
@@ -114,7 +130,7 @@ function PlayerTakeDamage()
 ///
 /// Attack 0 and 1 but reusable code
 ///
-function Attack0ChooseDir( _dir1, _dir2, _cdIndex)
+function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 {
 	var _cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
 	
@@ -127,13 +143,53 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex)
 	//CHECK VALUE AGAIN
 	_cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
 	
+	//ATTACK
 	if(_cdCurrentValue == 0)
 	{
 		var directionOfAttack = 1;
+		var horizontalOffset = 0;
+		var verticalOffset = 0;
 		
 		repeat(2)
 		{
-			var attackInst = instance_create_layer(x + 10 * directionOfAttack, y, "Instances", oAttack0);
+			var diagonal = false;
+			var currentDir = _dir1;
+			//DECIDE OFFSET
+			if(directionOfAttack != 1)
+			{
+				currentDir = _dir2;
+			}
+			
+			if((currentDir > 135 && currentDir < 225) || (currentDir > 315 && currentDir < 361) || (currentDir < 45 && currentDir > -1))//SET HORIZONTAL
+			{
+				horizontalOffset = 10;
+				verticalOffset = 0;
+			}
+			else if((currentDir > 45 && currentDir < 135) || (currentDir > 225 && currentDir < 315))//SET VERTICAL
+			{
+				horizontalOffset = 0;
+				verticalOffset = 10;
+			}
+			else
+			{
+				diagonal = true;//DIAGONAL CHECK ONLY COUNTS DIAGONAL ANGLES: 45, 135, 225, 315
+			}
+			
+			if(diagonal)
+			{
+				if((currentDir > 0 && currentDir < 90) || (currentDir > 180 && currentDir < 270))//SET DIAGONAL RIGHT UP/LEFT DOWN
+				{
+					horizontalOffset = 10;
+					verticalOffset = -10;
+				}
+				else if((currentDir > 90 && currentDir < 180) || (currentDir > 270 && currentDir < 360))//SET DIAGONAL LEFT UP/RIGHT DOWN
+				{
+					horizontalOffset = -10;
+					verticalOffset = -10;
+				}
+			}
+			
+			var attackInst = instance_create_layer(x + (horizontalOffset * directionOfAttack), y + (verticalOffset * directionOfAttack), "Instances", oAttack0);
 			
 			with(attackInst)
 			{
@@ -151,88 +207,90 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex)
 			}
 			directionOfAttack *= -1;
 		}
-		ds_list_insert(global.attackCooldowns, _cdIndex, 60);
-	}
-}
-
-
-
-
-///
-/// Attack 0 
-///
-function Attack0( _dir1, _dir2, _attackCD)
-{
-	if(attack0Cooldown != 0)
-	{
-		attack0Cooldown--;
-	}
-	
-	if(attack0Cooldown == 0)
-	{
-		var directionOfAttack = 1;
+		ds_list_insert(global.attackCooldowns, _cdIndex, _cdTimer);
 		
-		repeat(2)
-		{
-			var attackInst = instance_create_layer(x + 10 * directionOfAttack, y, "Instances", oAttack0);
-			
-			with(attackInst)
-			{
-				if(directionOfAttack)
-				{
-					dir = 0;
-					image_angle = dir;
-				}
-				else
-				{
-					dir = 180;
-					image_angle = dir;
-				}
-				
-			}
-			directionOfAttack *= -1;
-		}
-		attack0Cooldown = 60;
+		_cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
 	}
 }
 
 
 
 
-///
-/// Attack 1 
-///
-function Attack1()
-{
-	if(attack1Cooldown != 0)
-	{
-		attack1Cooldown--;
-	}
+/////
+///// Attack 0 
+/////
+//function Attack0( _dir1, _dir2, _attackCD)
+//{
+//	if(attack0Cooldown != 0)
+//	{
+//		attack0Cooldown--;
+//	}
 	
-	if(attack1Cooldown == 0)
-	{
-		var directionOfAttack = 1;
+//	if(attack0Cooldown == 0)
+//	{
+//		var directionOfAttack = 1;
 		
-		repeat(2)
-		{
-			var attackInst = instance_create_layer(x , y + 10 * directionOfAttack, "Instances", oAttack0);
+//		repeat(2)
+//		{
+//			var attackInst = instance_create_layer(x + 10 * directionOfAttack, y, "Instances", oAttack0);
 			
-			with(attackInst)
-			{
-				if(directionOfAttack)
-				{
-					dir = 270;
-					image_angle = dir;
-				}
-				else
-				{
-					dir = 90;
-					image_angle = dir;
-				}
+//			with(attackInst)
+//			{
+//				if(directionOfAttack)
+//				{
+//					dir = 0;
+//					image_angle = dir;
+//				}
+//				else
+//				{
+//					dir = 180;
+//					image_angle = dir;
+//				}
 				
-			}
-			directionOfAttack *= -1;
-		}
-		attack1Cooldown = 60;
-	}
-}
+//			}
+//			directionOfAttack *= -1;
+//		}
+//		attack0Cooldown = 60;
+//	}
+//}
+
+
+
+
+/////
+///// Attack 1 
+/////
+//function Attack1()
+//{
+//	if(attack1Cooldown != 0)
+//	{
+//		attack1Cooldown--;
+//	}
+	
+//	if(attack1Cooldown == 0)
+//	{
+//		var directionOfAttack = 1;
+		
+//		repeat(2)
+//		{
+//			var attackInst = instance_create_layer(x , y + 10 * directionOfAttack, "Instances", oAttack0);
+			
+//			with(attackInst)
+//			{
+//				if(directionOfAttack)
+//				{
+//					dir = 270;
+//					image_angle = dir;
+//				}
+//				else
+//				{
+//					dir = 90;
+//					image_angle = dir;
+//				}
+				
+//			}
+//			directionOfAttack *= -1;
+//		}
+//		attack1Cooldown = 60;
+//	}
+//}

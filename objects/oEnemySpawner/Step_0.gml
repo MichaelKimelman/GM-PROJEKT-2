@@ -1,7 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-
+if(!global.gamePaused)
+{
 if(global.enemiesKilledThisRound <= global.enemiesMaxThisRound && spawnedCreatures <= spawnLimit && spawnCooldown == 0 && global.enemiesSpawnedThisRound < global.enemiesMaxThisRound)
 {//&& instance_number(oEnemy) < global.enemiesMaxThisRound 
 	var directionNumber = irandom_range(0, 359);
@@ -18,4 +19,5 @@ if(global.enemiesKilledThisRound <= global.enemiesMaxThisRound && spawnedCreatur
 if(spawnCooldown > 0)
 {
 	spawnCooldown--;
+}
 }

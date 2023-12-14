@@ -8,4 +8,8 @@ global.enemiesKilledThisRound = 0;
 global.enemiesSpawnedThisRound = 0;
 global.victoryCondition = false;
 
-currentRound = 0;
+registeredClicks = 0;
+
+global.pauseMenu = false;
+
+global.currentRound = 0;
