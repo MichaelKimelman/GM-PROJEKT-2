@@ -49,7 +49,7 @@ function NewRound()
 		
 		case 3: 
 		
-			global.enemiesMaxThisRound = 1;
+			global.enemiesMaxThisRound = 100;
 			//struct2 = 
 			//{	
 			//	weaponId: 2,

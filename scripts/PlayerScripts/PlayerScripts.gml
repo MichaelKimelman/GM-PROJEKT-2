@@ -63,7 +63,7 @@ function PlayerAttacksExecute()
 		{
 			script_execute_ext(_listItem.scr, _listItem.args);
 			
-			var _debugStep = 0;
+			//var _debugStep = 0;
 		}
 		
 	}
@@ -132,17 +132,52 @@ function PlayerTakeDamage()
 ///
 function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 {
+	
+	
 	var _cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
 	
 	if(_cdCurrentValue != 0)
 	{
+		if(_dir1 == 135 && _dir2 == 315)
+					{
+						global.attack3Test1 = "true";
+					}
+					else
+					{
+						global.attack3Test1 = "false";
+					}
 		_cdCurrentValue--;
 		ds_list_insert(global.attackCooldowns, _cdIndex, _cdCurrentValue);
-	}
+		
+		if(_dir1 == 135 && _dir2 == 315)
+					{
+						global.attack3Test2 = "true";
+					}
+					else
+					{
+						global.attack3Test2 = "false";
+					}
+	}//After this if attack3 -> no work
+	
+	if(_dir1 == 135 && _dir2 == 315)
+					{
+						global.attack3Test3 = "true";
+					}
+					else
+					{
+						global.attack3Test3 = "false";
+					}
 	
 	//CHECK VALUE AGAIN
 	_cdCurrentValue = ds_list_find_value(global.attackCooldowns, _cdIndex)
-	
+	//if(_dir1 == 135 && _dir2 == 315)
+	//				{
+	//					global.attack3Test3 = "true";
+	//				}
+	//				else
+	//				{
+	//					global.attack3Test3 = "false";
+	//				}
 	//ATTACK
 	if(_cdCurrentValue == 0)
 	{
@@ -150,6 +185,14 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 		var horizontalOffset = 0;
 		var verticalOffset = 0;
 		
+		//if(_dir1 == 135 && _dir2 == 315)
+		//			{
+		//				global.attack3Test3 = "true";
+		//			}
+		//			else
+		//			{
+		//				global.attack3Test3 = "false";
+		//			}
 		repeat(2)
 		{
 			var diagonal = false;
@@ -158,6 +201,26 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 			if(directionOfAttack != 1)
 			{
 				currentDir = _dir2;
+				//if(currentDir == 135 || currentDir == 315)
+				//	{
+				//		global.attack3Test2 = currentDir;
+				//	}
+				//	else
+				//	{
+				//		global.attack3Test2 = "false";
+				//	}
+			}
+			
+			if(directionOfAttack == 1)
+			{
+				//if(currentDir == 135 || currentDir == 315)
+				//	{
+				//		global.attack3Test1 = currentDir;
+				//	}
+				//	else
+				//	{
+				//		global.attack3Test1 = "false";
+				//	}
 			}
 			
 			if((currentDir > 135 && currentDir < 225) || (currentDir > 315 && currentDir < 361) || (currentDir < 45 && currentDir > -1))//SET HORIZONTAL
@@ -173,6 +236,15 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 			else
 			{
 				diagonal = true;//DIAGONAL CHECK ONLY COUNTS DIAGONAL ANGLES: 45, 135, 225, 315
+				
+				//if(_dir1 == 135 && _dir2 == 315)
+				//	{
+				//		global.attack3Test = diagonal;
+				//	}
+				//	else
+				//	{
+				//		global.attack3Test = "false";
+				//	}
 			}
 			
 			if(diagonal)
@@ -193,10 +265,13 @@ function Attack0ChooseDir( _dir1, _dir2, _cdIndex, _cdTimer)
 			
 			with(attackInst)
 			{
+				
 				if(directionOfAttack)
 				{
+				
 					dir = _dir1;
 					image_angle = dir;
+					
 				}
 				else
 				{

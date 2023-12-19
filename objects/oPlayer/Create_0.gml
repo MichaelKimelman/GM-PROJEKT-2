@@ -30,7 +30,8 @@ ds_list_add(global.weaponList,
 	new weaponCreate(
 		0,
 		Attack0ChooseDir,
-		[ 0, 180, 0, 5]
+		[ 0, 180, 0, 5],
+		sAttackMenuIcon0
 		));
 		
 ds_list_add(global.weaponList, 
@@ -55,6 +56,10 @@ ds_list_add(global.weaponList,
 		sAttackMenuIcon3
 		));
 ds_list_add(global.attackList, ds_list_find_value(global.weaponList, 0));
+global.attack3Test = 0;
+global.attack3Test1 = 0;
+global.attack3Test2 = 0;
+global.attack3Test3 = 0;
 struct0 = 
 {	
 	scr: Attack0ChooseDir,

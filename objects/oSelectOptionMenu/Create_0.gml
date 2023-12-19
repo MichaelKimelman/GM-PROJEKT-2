@@ -27,5 +27,6 @@ for(var i = 0; i < availableItemsSize; i++)
 	{
 		item = ds_list_find_value(other.availableItems, i)
 		sprite_index = item.spr;
+		index = i;
 	}
 }
